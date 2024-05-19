@@ -2,7 +2,7 @@ from logging.config import fileConfig
 
 from sqlalchemy import engine_from_config
 from sqlalchemy import pool
-from config import database_url
+from config import DATABASE_URL
 from models.db_models import metadata
 from alembic import context
 
@@ -11,7 +11,7 @@ from alembic import context
 config = context.config
 
 section = config.config_ini_section
-config.set_section_option(section, "DATABASE_URL", database_url)
+config.set_section_option(section, "DATABASE_URL", DATABASE_URL)
 
 # Interpret the config file for Python logging.
 # This line sets up loggers basically.
