@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import AsyncGenerator
 from sqlalchemy import TIMESTAMP, Boolean, Integer, String
-from config import DB_HOST, DB_NAME, DB_PASSWORD, DB_PORT, DB_USER
+from src.config import DB_HOST, DB_NAME, DB_PASSWORD, DB_PORT, DB_USER
 from fastapi import Depends
 from fastapi_users.db import SQLAlchemyUserDatabase, SQLAlchemyBaseUserTable
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine

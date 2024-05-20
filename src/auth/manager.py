@@ -2,8 +2,8 @@ from typing import Optional
 from fastapi_users import exceptions, models, schemas
 from fastapi import Depends, Request
 from fastapi_users import BaseUserManager, IntegerIDMixin
-from auth.database import User, get_user_db
-from config import USER_MANAGER_SECRET
+from src.database import User, get_user_db
+from src.config import USER_MANAGER_SECRET
 
 SECRET = USER_MANAGER_SECRET
 
