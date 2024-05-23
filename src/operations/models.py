@@ -1,4 +1,4 @@
-from sqlalchemy import TIMESTAMP, Column, Integer, MetaData, String, Table
+from sqlalchemy import TIMESTAMP, Column, DateTime, Integer, MetaData, String, Table
 from datetime import datetime
 
 metadata = MetaData()
@@ -7,9 +7,9 @@ operation = Table(
     "operation",
     metadata,
     Column("id", Integer, primary_key=True),
+    Column("currency", String),
     Column("quantity", String),
-    Column("figi", String),
     Column("instrument_type", String, nullable=True),
-    Column("date", TIMESTAMP, default=datetime.utcnow),
+    Column("date", TIMESTAMP(timezone=True), default=datetime.utcnow),
     Column("type", String),
 )
