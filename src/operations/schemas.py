@@ -1,6 +1,12 @@
 from datetime import datetime
-from typing import List
+from enum import Enum
+from typing import List, Optional
 from pydantic import BaseModel
+
+
+class CurrencyEnum(str, Enum):
+    Sell = "Sell"
+    Buy = "Buy"
 
 
 class OperationCreate(BaseModel):
@@ -9,14 +15,13 @@ class OperationCreate(BaseModel):
     quantity: str
     instrument_type: str
     date: datetime
-    type: str
+    type: CurrencyEnum
 
     class Config:
-        orm_mode = True
         from_attributes = True
 
 
 class ResponseModel(BaseModel):
     status: str
-    data: List[OperationCreate]
-    details: str
+    data: Optional[List[OperationCreate]]
+    details: Optional[str]

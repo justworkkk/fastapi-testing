@@ -5,18 +5,45 @@ from src.auth.manager import get_user_manager
 from src.auth.schemas import UserRead, UserCreate
 from src.database import User
 from src.operations.router import router as router_operation
+import sentry_sdk
+from contextlib import asynccontextmanager
+from collections.abc import AsyncIterator
+from redis import asyncio as aioredis
+from fastapi_cache import FastAPICache
+from fastapi_cache.backends.redis import RedisBackend
+import signal
+import uvicorn
+import asyncio
+
+sentry_sdk.init(
+    dsn="https://032dd9a8b14a14dfba4fae353ced280b@o4507125847621632.ingest.de.sentry.io/4507323943485520",
+    # Set traces_sample_rate to 1.0 to capture 100%
+    # of transactions for performance monitoring.
+    traces_sample_rate=1.0,
+    # Set profiles_sample_rate to 1.0 to profile 100%
+    # of sampled transactions.
+    # We recommend adjusting this value in production.
+    profiles_sample_rate=1.0,
+)
 
 fastapi_users = FastAPIUsers[User, int](
     get_user_manager,
     [auth_backend],
 )
 
-app = FastAPI()
+
+@asynccontextmanager
+async def lifespan(_: FastAPI) -> AsyncIterator[None]:
+    redis = aioredis.from_url("redis://localhost")
+    FastAPICache.init(RedisBackend(redis), prefix="fastapi-cache")
+    yield
+
+
+app = FastAPI(lifespan=lifespan)
 
 
 app.include_router(
     fastapi_users.get_auth_router(auth_backend),
-    # prefix="/auth/jwt",
     prefix="/auth",
     tags=["Auth"],
 )
