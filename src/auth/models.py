@@ -14,9 +14,7 @@ from sqlalchemy import (
     func,
     DateTime,
 )
-
-
-metadata = MetaData()
+from src.database import metadata
 
 user = Table(
     "user",

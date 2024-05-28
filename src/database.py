@@ -1,6 +1,6 @@
 from datetime import datetime
 from typing import AsyncGenerator
-from sqlalchemy import TIMESTAMP, Boolean, Integer, String
+from sqlalchemy import TIMESTAMP, Boolean, Integer, MetaData, String
 from src.config import DB_HOST, DB_NAME, DB_PASSWORD, DB_PORT, DB_USER
 from fastapi import Depends
 from fastapi_users.db import SQLAlchemyUserDatabase, SQLAlchemyBaseUserTable
@@ -10,6 +10,9 @@ from sqlalchemy.orm import DeclarativeBase, mapped_column, Mapped
 DATABASE_URL = (
     f"postgresql+asyncpg://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
 )
+
+
+metadata = MetaData()
 
 
 class Base(DeclarativeBase):
