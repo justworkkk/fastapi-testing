@@ -1,7 +1,6 @@
 from pydantic import ConfigDict
 from typing import Optional
 from fastapi_users import schemas
-from pydantic.version import VERSION as PYDANTIC_VERSION
 
 
 class UserRead(schemas.BaseUser[int]):
@@ -11,13 +10,7 @@ class UserRead(schemas.BaseUser[int]):
     is_active: bool = True
     is_superuser: bool = False
     is_verified: bool = False
-
-    if PYDANTIC_VERSION.startswith("2."):
-        model_config = ConfigDict(from_attributes=True)
-    else:
-
-        class Config:
-            from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 class UserCreate(schemas.BaseUserCreate):

@@ -1,7 +1,7 @@
 from datetime import datetime
 from enum import Enum
 from typing import List, Optional
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 
 
 class CurrencyEnum(str, Enum):
@@ -16,9 +16,7 @@ class OperationCreate(BaseModel):
     instrument_type: str
     date: datetime
     type: CurrencyEnum
-
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 class ResponseModel(BaseModel):

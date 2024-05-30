@@ -6,12 +6,13 @@ from src.auth.schemas import UserRead, UserCreate
 from src.database import User
 from src.operations.router import router as router_operation
 from src.tasks.router import router as router_tasks
-import sentry_sdk
 from contextlib import asynccontextmanager
 from collections.abc import AsyncIterator
 from redis import asyncio as aioredis
 from fastapi_cache import FastAPICache
 from fastapi_cache.backends.redis import RedisBackend
+from fastapi.middleware.cors import CORSMiddleware
+import sentry_sdk
 import logging
 
 
@@ -56,6 +57,23 @@ async def lifespan(_: FastAPI) -> AsyncIterator[None]:
 
 app = FastAPI(lifespan=lifespan)
 
+# If you need cors middleware, you can uncomment code further
+
+# origins = [
+#     "http://localhost.tiangolo.com",
+#     "https://localhost.tiangolo.com",
+#     "http://localhost",
+#     "http://localhost:8080",
+# ]
+
+# app.add_middleware(
+#     CORSMiddleware,
+#     allow_origins=origins,
+#     allow_credentials=True,
+#     allow_methods=["*"],
+#     allow_headers=["*"],
+# )
+
 
 app.include_router(
     fastapi_users.get_auth_router(auth_backend),
@@ -70,4 +88,6 @@ app.include_router(
 )
 
 app.include_router(router_operation)
+
+
 app.include_router(router_tasks)
