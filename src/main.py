@@ -12,9 +12,20 @@ from redis import asyncio as aioredis
 from fastapi_cache import FastAPICache
 from fastapi_cache.backends.redis import RedisBackend
 from fastapi.middleware.cors import CORSMiddleware
+from src.pages.router import router as router_pages
+from src.chat.router import router as router_chat
 import sentry_sdk
 import logging
 
+
+@asynccontextmanager
+async def lifespan(_: FastAPI) -> AsyncIterator[None]:
+    redis = aioredis.from_url("redis://localhost")
+    FastAPICache.init(RedisBackend(redis), prefix="fastapi-cache")
+    yield
+
+
+app = FastAPI(lifespan=lifespan)
 
 logging.basicConfig(level=logging.INFO)
 
@@ -48,15 +59,6 @@ fastapi_users = FastAPIUsers[User, int](
 )
 
 
-@asynccontextmanager
-async def lifespan(_: FastAPI) -> AsyncIterator[None]:
-    redis = aioredis.from_url("redis://localhost")
-    FastAPICache.init(RedisBackend(redis), prefix="fastapi-cache")
-    yield
-
-
-app = FastAPI(lifespan=lifespan)
-
 # If you need cors middleware, you can uncomment code further
 
 # origins = [
@@ -89,5 +91,8 @@ app.include_router(
 
 app.include_router(router_operation)
 
-
 app.include_router(router_tasks)
+
+app.include_router(router_pages)
+
+app.include_router(router_chat)
